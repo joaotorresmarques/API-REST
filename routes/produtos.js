@@ -4,15 +4,18 @@ const Produto = require('../models/produto')
 const multer = require('multer')
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/')
+  destination: (req, file, callback) => {
+    callback(null, 'uploads/')
   },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
+  filename: (req, file, callback) => {
+    callback(null, file.originalname)
   }
 })
 
-const upload = multer({storage: storage}); //multer({ dest: 'uploads/' })
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 *1024}
+}); //multer({ dest: 'uploads/' })
 
 router.post('/', upload.single('produto_imagem'), (req, res) => {
   console.log(req.file.path)
@@ -30,6 +33,11 @@ router.post('/', upload.single('produto_imagem'), (req, res) => {
           tipo: 'POST',
           descricao: "inserir produto",
           url: "http://localhost:8089/produtos"
+        },
+        img:{
+          name: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size
         }
       }
     }

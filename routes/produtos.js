@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1024 *1024}
+  limits: { fileSize: 1024 * 1024 }
 }); //multer({ dest: 'uploads/' })
 
 router.post('/', upload.single('produto_imagem'), (req, res) => {
@@ -34,7 +34,7 @@ router.post('/', upload.single('produto_imagem'), (req, res) => {
           descricao: "inserir produto",
           url: "http://localhost:8089/produtos"
         },
-        img:{
+        img: {
           name: req.file.originalname,
           mimetype: req.file.mimetype,
           size: req.file.size

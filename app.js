@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const rotaProdutos = require('./routes/produtos')
 const rotaPedidos = require('./routes/pedidos')
+const rotaUsuarios = require('./routes/usuarios')
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({extended: false})) //apenas dados simples
@@ -11,6 +12,7 @@ app.use(bodyParser.json()) //so aceita json
 app.use(morgan('dev'))
 app.use('/produtos',rotaProdutos)
 app.use('/pedidos',rotaPedidos)
+app.use('/usuarios', rotaUsuarios)
 
 //CORS() - controle na API
 app.use((req,res)=>{

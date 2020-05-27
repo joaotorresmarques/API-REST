@@ -11,15 +11,38 @@ const storage = multer.diskStorage({
     cb(null, file.originalname)
   }
 })
-const upload = multer(
-  {
-    dest: 'uploads/',
-    limits: {
-      //fileSize: 1024 * 1024
-    }
-  }
-)
 
+const upload = multer({storage: storage}); //multer({ dest: 'uploads/' })
+
+router.post('/', upload.single('produto_imagem'), (req, res) => {
+  console.log(req.file.path)
+  Produto.create({
+    nome: req.body.nome,
+    preco: req.body.preco,
+    imagem_produto: req.file
+  }).then((x) => {
+    const response = {
+      mensagem: "Produto inserido",
+      produtoCriado: {
+        nome: req.body.nome,
+        preco: req.body.preco,
+        request: {
+          tipo: 'POST',
+          descricao: "inserir produto",
+          url: "http://localhost:8089/produtos"
+        }
+      }
+    }
+    /*res.status(201).send({
+      mensagem: "Produto inserido"
+    })*/
+    res.status(201).send({ response })
+  }).catch((error) => {
+    res.status(500).send({
+      error: error
+    })
+  })
+})
 router.get('/', (req, res) => {
   Produto.findAll().then((x) => {
     const response = {
@@ -75,35 +98,7 @@ router.patch('/:id', (req, res) => {
   })
 })
 
-router.post('/', upload.single('produto_imagem'), (req, res) => {
-  console.log(req.file.path)
-  Produto.create({
-    nome: req.body.nome,
-    preco: req.body.preco,
-    imagem_produto: req.file.path
-  }).then((x) => {
-    const response = {
-      mensagem: "Produto inserido",
-      produtoCriado: {
-        nome: req.body.nome,
-        preco: req.body.preco,
-        request: {
-          tipo: 'POST',
-          descricao: "inserir produto",
-          url: "http://localhost:8089/produtos"
-        }
-      }
-    }
-    /*res.status(201).send({
-      mensagem: "Produto inserido"
-    })*/
-    res.status(201).send({ response })
-  }).catch((error) => {
-    res.status(500).send({
-      error: error
-    })
-  })
-})
+
 
 router.delete('/:id', (req, res) => {
   const id = req.params.id

@@ -10,7 +10,8 @@ router.get('/', (req, res) => {
       pedidos: x.map(ped => {
         return {
           id_pedido: ped.id_pedido,
-          quantidade: ped.quantidade
+          quantidade: ped.quantidade,
+          id_produto: ped.id_produto
         }
       })
     }

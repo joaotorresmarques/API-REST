@@ -9,6 +9,9 @@ const Produto = db.sequelize.define('produtos',{
   },
   preco: {
     type: db.Sequelize.DOUBLE
+  },
+  imagem_produto:{
+    type: db.Sequelize.INTEGER
   }
 
 })

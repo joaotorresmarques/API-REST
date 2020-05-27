@@ -1,6 +1,24 @@
 const express = require("express")
 const router = express.Router()
 const Produto = require('../models/produto')
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer(
+  {
+    dest: 'uploads/',
+    limits: {
+      //fileSize: 1024 * 1024
+    }
+  }
+)
 
 router.get('/', (req, res) => {
   Produto.findAll().then((x) => {
@@ -57,18 +75,19 @@ router.patch('/:id', (req, res) => {
   })
 })
 
-router.post('/', (req, res) => {
+router.post('/', upload.single('produto_imagem'), (req, res) => {
+  console.log(req.file.path)
   Produto.create({
     nome: req.body.nome,
-    preco: req.body.preco
+    preco: req.body.preco,
+    imagem_produto: req.file.path
   }).then((x) => {
     const response = {
       mensagem: "Produto inserido",
       produtoCriado: {
-        id_produto: x.id_produto, //NAO FUNCIONOU
         nome: req.body.nome,
         preco: req.body.preco,
-        request:{
+        request: {
           tipo: 'POST',
           descricao: "inserir produto",
           url: "http://localhost:8089/produtos"
@@ -78,7 +97,7 @@ router.post('/', (req, res) => {
     /*res.status(201).send({
       mensagem: "Produto inserido"
     })*/
-    res.status(201).send({response})
+    res.status(201).send({ response })
   }).catch((error) => {
     res.status(500).send({
       error: error

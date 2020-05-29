@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const Produto = require('../models/produto')
 const multer = require('multer')
+const login = require('../middleware/login')
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -17,7 +18,7 @@ const upload = multer({
   limits: { fileSize: 1024 * 1024 }
 }); //multer({ dest: 'uploads/' })
 
-router.post('/', upload.single('produto_imagem'), (req, res) => {
+router.post('/', upload.single('produto_imagem'), login, (req, res) => {
   console.log(req.file.path)
   Produto.create({
     nome: req.body.nome,

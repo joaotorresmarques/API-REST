@@ -78,7 +78,7 @@ exports.EditarProduto = (req, res) => {
   }, {
     where: { id_produto: id }
   }).then(() => {
-    res.status(201).send({
+    res.status(200).send({
       mensagem: "Produto alterado!"
     })
   }).catch((error) => {
@@ -90,7 +90,7 @@ exports.EditarProduto = (req, res) => {
 exports.deletarProduto = (req, res) => {
   const id = req.params.id
   Produto.destroy({ where: { id_produto: id } }).then(() => {
-    res.status(201).send({
+    res.status(200).send({
       mensagem: "Produto excluido!"
     })
   }).catch((error) => {

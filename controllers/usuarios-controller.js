@@ -14,7 +14,7 @@ exports.postUsuario = (req, res) => {
         UsuarioCriado: { nome: req.body.email }
       }
       console.log(hash)
-      res.status(200).send(response)
+      res.status(201).send(response)
     }).catch((error, errBcrypt) => {
       errBcrypt ? erro = errBcrypt : erro = error
       res.status(500).send({
